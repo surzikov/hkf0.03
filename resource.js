@@ -2,9 +2,9 @@ let resources = {
     knight: {
         properties:{
             health: 20,
-            height: 120,
-            width: 60,
-            speed: 10
+            height: 140,
+            width: 80,
+            speed: 9.5
         },
         buttons:[
             [
@@ -39,8 +39,8 @@ let resources = {
             moving: {
                 standing_left: 'images/sprites/knight/standing_left.png',
                 standing_right: 'images/sprites/knight/standing_right.png',
-                forward: [],
-                back: [],
+                move_left: ['images/sprites/knight/move_left0.png','images/sprites/knight/move_left1.png','images/sprites/knight/move_left2.png','images/sprites/knight/move_left3.png'],
+                move_right: ['images/sprites/knight/move_right0.png','images/sprites/knight/move_right1.png','images/sprites/knight/move_right2.png','images/sprites/knight/move_right3.png'],
                 jump: []
             }
         }

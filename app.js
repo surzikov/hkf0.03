@@ -50,7 +50,8 @@ function drawPlayer1(){
             
         // }
     }
-    ctx.drawImage(player1_properties.img, player1_properties.x, player1_properties.y, player1_properties.width, player1_properties.height)
+    console.log(player1_properties.img.width)
+    ctx.drawImage(player1_properties.img, player1_properties.x, player1_properties.y, player1_properties.width * (player1_properties.img.width/player1_properties.width), player1_properties.height)
 }
 let count = 0
 let keys1_history = []
@@ -78,14 +79,36 @@ document.addEventListener('keydown',(e)=>{
 document.addEventListener('keyup', (e)=>{
     keys1.splice(keys1.indexOf(e.code),1)
 })
+let m_a_helper = 0
+function moveAnim(){
+    if(player1_properties.condition == 'ground' & player1_properties.move_flag == true){
+        if(player1_properties.side == 'left'){
+            player1_properties.img.src = player1_resources.sprites.moving.move_left[m_a_helper]
+        }else if(player1_properties.side == 'right'){
+            player1_properties.img.src = player1_resources.sprites.moving.move_right[m_a_helper]
+        }
+        if(m_a_helper < player1_resources.sprites.moving.move_left.length-1){
+            m_a_helper++
+        }else{
+            m_a_helper = 0
+        }
+    }else{
+        m_a_helper = 0
+    }
+    setTimeout(moveAnim, 200)
+}
+moveAnim()
 function checkMove(){
-
         if(keys1.includes('KeyD') & player1_properties.x+player1_properties.speed < canvas.width-player1_properties.width/2){
+            player1_properties.move_flag = true
             player1_properties.side = 'right'
             player1_properties.x+=player1_properties.speed
         }else if(keys1.includes('KeyA') & player1_properties.x-player1_properties.speed > 0 + player1_properties.width/2){
+            player1_properties.move_flag = true
             player1_properties.side = 'left'
             player1_properties.x-=player1_properties.speed
+        }else{
+            player1_properties.move_flag = false
         }
         if(keys1.includes('KeyZ') & player1_properties.condition == 'ground'){
             playerJump()
@@ -96,7 +119,7 @@ function checkMove(){
 let grav_flag = true
 let jump_count = 0
 function helpJump(){
-    jump_speed = 3 - (jump_count/100 * 4)
+    jump_speed = 3 - (jump_count/100 * 6)
     setTimeout(()=>{
         if(jump_count<50){
             player1_properties.y-=jump_speed
@@ -118,7 +141,7 @@ function playerJump(){
 }
 let grav_count = 0
 function gravitation(){
-    let fall_speed = 2 + grav_count/5
+    let fall_speed = 1 + grav_count/5
     if(player1_properties.condition != 'ground' & grav_flag == true){
         player1_properties.y+=Math.floor(fall_speed)
         grav_count++
