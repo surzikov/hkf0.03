@@ -19,6 +19,7 @@ let player1_properties = {
     condition: 'ground',
     attack_flag: false,
     move_flag: false,
+    jump_flag: false,
     img: new Image(),
     side: 'right',
     speed: player1_resources.properties.speed
@@ -38,7 +39,7 @@ function drawFrame(){
 let game_start_flag = true
 
 function drawPlayer1(){
-    if(player1_properties.attack_flag == false & player1_properties.move_flag == false){
+    if(player1_properties.attack_flag == false & player1_properties.move_flag == false & player1_properties.condition == 'ground'){
         // if(player1_properties.condition == 'ground'){
             if(player1_properties.side == 'right'){
                 player1_properties.img.src = player1_resources.sprites.moving.standing_right
@@ -51,7 +52,7 @@ function drawPlayer1(){
         // }
     }
     console.log(player1_properties.img.width)
-    ctx.drawImage(player1_properties.img, player1_properties.x, player1_properties.y, player1_properties.width * (player1_properties.img.width/player1_properties.width), player1_properties.height)
+    ctx.drawImage(player1_properties.img, player1_properties.x, player1_properties.y, (player1_properties.width * (player1_properties.img.width/player1_properties.width)), player1_properties.height)
 }
 let count = 0
 let keys1_history = []
@@ -95,7 +96,7 @@ function moveAnim(){
     }else{
         m_a_helper = 0
     }
-    setTimeout(moveAnim, 200)
+    setTimeout(moveAnim, 150)
 }
 moveAnim()
 function checkMove(){
@@ -135,9 +136,18 @@ function helpJump(){
     },5)
 }
 function playerJump(){
-    grav_flag = false
-    player1_properties.condition = 'air'
-    helpJump()
+    if(player1_properties.jump_flag == false){
+        grav_flag = false
+        player1_properties.jump_flag = true
+        player1_properties.condition = 'air'
+        if(player1_properties.side == 'left'){
+            player1_properties.img.src = player1_resources.sprites.moving.jump_left
+        }else{
+            player1_properties.img.src = player1_resources.sprites.moving.jump_right
+        }
+        helpJump()
+    }
+    
 }
 let grav_count = 0
 function gravitation(){
@@ -149,6 +159,10 @@ function gravitation(){
             player1_properties.condition = 'ground'
             player1_properties.y = floor-player1_properties.height
             grav_count=0
+            setTimeout(()=>{
+                player1_properties.jump_flag = false  
+            }, 100)
+            
         }
     }
     setTimeout(gravitation, 10)
